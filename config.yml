@@ -1,0 +1,7 @@
+tunnel: x-x-x-x-x
+credentials-file: /home/u0123456789/.cloudflared/x-x-x-x-x.json
+ingress:
+  - hostname: yourdomain.tld
+    service: http://127.0.0.1:8000
+
+  - service: http_status:404
