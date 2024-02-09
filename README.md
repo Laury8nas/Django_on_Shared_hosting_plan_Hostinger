@@ -12,10 +12,16 @@ Before going further, make sure to:
 - Have at least a Premium Web hosting plan or its equivalent
 
 After that, [log in to your shared hosting plan via SSH](https://support.hostinger.com/en/articles/1583245-how-to-connect-to-a-hosting-plan-via-sshhttp:// "login to your shared hosting plan via SSH") and execute this command to be in the public_html folder:
-`cd domains/yourdomain.tld/public_html`
+```bash
+cd domains/yourdomain.tld/public_html
+```
 Now, download the configuration files and [Django project](https://github.com/mymi14s/Django-Project-Starter-Template/tree/master "Django project") by executing these commands:
-`git clone "https://github.com/mymi14s/Django-Project-Starter-Template.git"`
-`git clone "https://github.com/Laury8nas/Django_on_Shared_hosting_plan_Hostinger.git"`
+```bash
+git clone "https://github.com/mymi14s/Django-Project-Starter-Template.git"
+```
+```bash
+git clone "https://github.com/Laury8nas/Django_on_Shared_hosting_plan_Hostinger.git"
+```
 
 Also, make sure to download `Cloudflared` executable files from [official sources](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/http:// "official sources") or from [this MEGA link](https://mega.nz/folder/8fcwmA4J#WGhVhxEvnYNTigGdBuqGpA "this MEGA link")(there should be one executable file called "cloudflared" and the other file called "hell", they're the same but you need to download both of them) and upload them in this path: `/home/u0123456789/domains/yourdomain.tld/public_html/Django_on_Shared_hosting_plan_Hostinger`
 
@@ -24,23 +30,37 @@ Also, make sure to download `Cloudflared` executable files from [official source
 ## Django server configuration
 
 To proceed with the Django application deployment, you need to install `pip` packet manager. To do that, in your terminal make sure to be in the correct location:
-`cd /home/u0123456789/domains/yourdomain.tld/public_html/Django_on_Shared_hosting_plan_Hostinger`
+```bash
+cd /home/u0123456789/domains/yourdomain.tld/public_html/Django_on_Shared_hosting_plan_Hostinger
+```
 
 Now, you can install `pip` packet manager by executing this command:
-`python3 get-pip.py`
+```python
+python3 get-pip.py
+```
 
 After that, go into the Django project folder by executing this command:
-`cd /home/u0123456789/domains/yourdomain.tld/public_html/Django-Project-Starter-Template/src/
-`
+```bash
+cd /home/u0123456789/domains/yourdomain.tld/public_html/Django-Project-Starter-Template/src/
+```
+
 Install the required libraries for that Django project:
-`cat requirements.txt | xargs -n 1 python3 /home/u0123456789/.local/bin/pip install`
+```bash
+cat requirements.txt | xargs -n 1 python3 /home/u0123456789/.local/bin/pip install
+```
 
 Make migrations:
-`python3 manage.py makemigrations user setting`
-`python3 manage.py migrate`
+```python
+python3 manage.py makemigrations user setting
+```
+```python
+python3 manage.py migrate
+```
 
 Check if the Django server runs without any problems:
-`python3 manage.py runserver`
+```python
+python3 manage.py runserver
+```
 
 If you see an output similar to this, then you're good to go!:
 ```
@@ -55,15 +75,21 @@ Quit the server with CONTROL-C.
 You can quit the Django server by presing `CTRL + C `.
 
 Now, you will need to edit the Django project `settings.py` file by executing this command:
-`nano core/settings.py`
+```bash
+nano core/settings.py
+```
 
 *Also, you can use `vim` and if it's difficult, you can use [File Manager](https://www.hostinger.com/tutorials/how-to-use-hostinger-file-manager/ "File Manager") to edit the files.
 
 You should find this line:
-`ALLOWED_HOSTS = ['127.0.0.1']`
+```python
+ALLOWED_HOSTS = ['127.0.0.1']
+```
 
 When you will find that line, change the value from `127.0.0.1` to `yourdomain.tld`. It should look like this:
-`ALLOWED_HOSTS = ['yourdomain.tld']`
+```python
+ALLOWED_HOSTS = ['yourdomain.tld']
+```
 
 Don't forget to save the changes!
 
@@ -74,18 +100,28 @@ Don't forget to save the changes!
 To properly connect the localhost:8000 to your domain name, you will need a solution which is called "tunneling". If you want to learn more about Cloudflare tunnels, you can read [this article](https://www.cloudflare.com/products/tunnel/ "this article").
 
 To begin configuring Cloudflare tunnels, you need to be in the correct location:
-`cd /home/u0123456789/domains/yourdomain.tld/public_html/Django_on_Shared_hosting_plan_Hostinger`
+```bash
+cd /home/u0123456789/domains/yourdomain.tld/public_html/Django_on_Shared_hosting_plan_Hostinger
+```
 
 Then, you will need to give the files "cloudflared" and "hell" execution permissions:
-`chmod +x cloudflared`
-`chmod +x hell`
+```bash
+chmod +x cloudflared
+```
+```bash
+chmod +x hell
+```
 
 After that, you can authenticate `cloudflared` client by running this command:
-`./cloudflared tunnel login`
+```bash
+./cloudflared tunnel login
+```
 In the output, there should be a link that you need to visit and sign in to your CloudFlare account. Don't forget to select your domain name and click **Authorize**.
 
 Now, create the tunnel by executing this command:
-`./cloudflared tunnel create name_of_tunnel`
+```bash
+./cloudflared tunnel create name_of_tunnel
+```
 
 From the output of the command, take note of the tunnel’s UUID and the path to your tunnel’s credentials file.
 
@@ -94,20 +130,28 @@ From the output of the command, take note of the tunnel’s UUID and the path to
 ### Modify the credentials file
 
 To make a correct connection with your Django application, it's needed to configure some rules. To do that, move the `config.yml ` file by executing this command:
-`mv /home/u0123456789/domains/yourdomain.tld/public_html/Django_on_Shared_hosting_plan_Hostinger/config.yml /home/u0123456789/.cloudflared`
+```bash
+mv /home/u0123456789/domains/yourdomain.tld/public_html/Django_on_Shared_hosting_plan_Hostinger/config.yml /home/u0123456789/.cloudflared
+```
 
 Edit the config.yml file by executing this command:
-`nano /home/u0123456789/.cloudflared/config.yml`
+```bash
+nano /home/u0123456789/.cloudflared/config.yml
+```
 
 You should change:
 - `tunnel` value to your tunnel’s UUID
 - '`credentials-file`' value to the path of your .json file which you got by creating a tunnel (usually, that file is in .cloudflared folder).
 - `hostname` value to your domain name
 
+![image](https://github.com/Laury8nas/Django_on_Shared_hosting_plan_Hostinger/assets/30197870/ba419b8f-2e13-40b0-bba8-8e1896d5ac50)
+
 Don't forget to save the changes!
 
 To complete the configuration, you need to route the traffic from the domain to your application by executing this command(make sure that you are in this location `/home/u0123456789/domains/yourdomain.tld/public_html/Django_on_Shared_hosting_plan_Hostinger`):
-`./cloudflared tunnel route dns name_of_tunnel yourdomain.tld`
+```bash
+./cloudflared tunnel route dns name_of_tunnel yourdomain.tld
+```
 
 **replace u0123456789, yourdomain.tld and name_of_tunnel with your hosting username, your domain name and the name of the tunnel*
 
